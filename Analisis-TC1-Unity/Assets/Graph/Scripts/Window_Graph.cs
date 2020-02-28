@@ -9,9 +9,14 @@ public class Window_Graph : MonoBehaviour
 
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
+    private RectTransform labelTemplateX;
+    private RectTransform labelTemplateY;
 
     private void Awake(){
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
+        labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
+        labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
+
         //CreateCircle(new Vector2(200, 200));
         List<int> valueList = new List<int>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
         ShowGraph(valueList);
@@ -54,6 +59,22 @@ public class Window_Graph : MonoBehaviour
                 CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
             }
             lastCircleGameObject = circleGameObject;
+
+            RectTransform labelX = Instantiate(labelTemplateX);
+            labelX.SetParent(graphContainer);
+            labelX.gameObject.SetActive(true);
+            labelX.anchoredPosition = new Vector2(xPosition, -7f);
+            labelX.GetComponent<Text>().text = i.ToString();
+        }
+
+        int separatorCount = 10;
+        for (int i = 0; i <= separatorCount; i++){
+            RectTransform labelY = Instantiate(labelTemplateY);
+            labelY.SetParent(graphContainer);
+            labelY.gameObject.SetActive(true);
+            float normalizedValue = i * 1f/separatorCount;
+            labelY.anchoredPosition = new Vector2(-7f, normalizedValue * graphHeight);
+            labelY.GetComponent<Text>().text = Mathf.RoundToInt(normalizedValue * yMaximun).ToString();
         }
     }
     private void CreateDotConnection(Vector2 dotPositionA, Vector2 dotPositionB){
