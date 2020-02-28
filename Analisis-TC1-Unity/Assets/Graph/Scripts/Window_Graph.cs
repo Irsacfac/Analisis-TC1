@@ -11,7 +11,9 @@ public class Window_Graph : MonoBehaviour
 
     private void Awake(){
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-        CreateCircle(new Vector2(200, 200));
+        //CreateCircle(new Vector2(200, 200));
+        List<int> valueList = new List<int>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
+        ShowGraph(valueList);
     }
 
     // Start is called before the first frame update
@@ -35,5 +37,16 @@ public class Window_Graph : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(11, 11);
         rectTransform.anchorMin = new Vector2(0, 0);
         rectTransform.anchorMax = new Vector2(0, 0);
+    }
+
+    private void ShowGraph(List<int> valueList){
+        float graphHeight = graphContainer.sizeDelta.y;
+        float xSize = 50f;
+        float yMaximun = 100f;
+        for(int i = 0; i < valueList.Count; i++){
+            float xPosition = i*xSize;
+            float yPosition = (valueList[i]/yMaximun) * graphHeight;
+            CreateCircle(new Vector2(xPosition, yPosition));
+        }
     }
 }
