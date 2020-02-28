@@ -11,11 +11,15 @@ public class Window_Graph : MonoBehaviour
     private RectTransform graphContainer;
     private RectTransform labelTemplateX;
     private RectTransform labelTemplateY;
+    private RectTransform dashTemplateX;
+    private RectTransform dashTemplateY;
 
     private void Awake(){
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
         labelTemplateX = graphContainer.Find("labelTemplateX").GetComponent<RectTransform>();
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
+        dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
+        dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
 
         //CreateCircle(new Vector2(200, 200));
         List<int> valueList = new List<int>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
@@ -65,6 +69,11 @@ public class Window_Graph : MonoBehaviour
             labelX.gameObject.SetActive(true);
             labelX.anchoredPosition = new Vector2(xPosition, -7f);
             labelX.GetComponent<Text>().text = i.ToString();
+
+            RectTransform dashX = Instantiate(dashTemplateY);
+            dashX.SetParent(graphContainer, false);
+            dashX.gameObject.SetActive(true);
+            dashX.anchoredPosition = new Vector2(xPosition, -7f);
         }
 
         int separatorCount = 10;
@@ -75,6 +84,11 @@ public class Window_Graph : MonoBehaviour
             float normalizedValue = i * 1f/separatorCount;
             labelY.anchoredPosition = new Vector2(-7f, normalizedValue * graphHeight);
             labelY.GetComponent<Text>().text = Mathf.RoundToInt(normalizedValue * yMaximun).ToString();
+
+            RectTransform dashY = Instantiate(dashTemplateX);
+            dashY.SetParent(graphContainer, false);
+            dashY.gameObject.SetActive(true);
+            dashY.anchoredPosition = new Vector2(-4f, normalizedValue * graphHeight);
         }
     }
     private void CreateDotConnection(Vector2 dotPositionA, Vector2 dotPositionB){
