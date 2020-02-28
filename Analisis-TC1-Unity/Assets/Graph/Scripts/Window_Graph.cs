@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CodeMonkey.Utils;
+using System;
 
 public class Window_Graph : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class Window_Graph : MonoBehaviour
 
         //CreateCircle(new Vector2(200, 200));
         List<int> valueList = new List<int>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
-        ShowGraph(valueList);
+        ShowGraph(valueList, (int _i) => "Day " +(_i), (float _f) => "$" + Mathf.RoundToInt(_f));
     }
 
     // Start is called before the first frame update
@@ -50,7 +51,13 @@ public class Window_Graph : MonoBehaviour
         return gameObject;
     }
 
-    private void ShowGraph(List<int> valueList){
+    private void ShowGraph(List<int> valueList, Func<int, string> getAxisLabelX = null, Func<float, string> getAxisLabelY = null){
+        if(getAxisLabelX == null){
+            getAxisLabelX = delegate (int _i) { return _i.ToString(); };
+        }
+        if(getAxisLabelY == null){
+            getAxisLabelY = delegate (float _f) { return Mathf.RoundToInt(_f).ToString(); };
+        }
         float graphHeight = graphContainer.sizeDelta.y;
         float xSize = 50f;
         float yMaximun = 100f;
@@ -68,7 +75,7 @@ public class Window_Graph : MonoBehaviour
             labelX.SetParent(graphContainer);
             labelX.gameObject.SetActive(true);
             labelX.anchoredPosition = new Vector2(xPosition, -7f);
-            labelX.GetComponent<Text>().text = i.ToString();
+            labelX.GetComponent<Text>().text = getAxisLabelX(i);
 
             RectTransform dashX = Instantiate(dashTemplateX);
             dashX.SetParent(graphContainer, false);
@@ -83,7 +90,7 @@ public class Window_Graph : MonoBehaviour
             labelY.gameObject.SetActive(true);
             float normalizedValue = i * 1f/separatorCount;
             labelY.anchoredPosition = new Vector2(-7f, normalizedValue * graphHeight);
-            labelY.GetComponent<Text>().text = Mathf.RoundToInt(normalizedValue * yMaximun).ToString();
+            labelY.GetComponent<Text>().text = getAxisLabelY(normalizedValue * yMaximun);
 
             RectTransform dashY = Instantiate(dashTemplateY);
             dashY.SetParent(graphContainer, false);
