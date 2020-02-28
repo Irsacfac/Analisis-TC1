@@ -70,7 +70,7 @@ public class Window_Graph : MonoBehaviour
             labelX.anchoredPosition = new Vector2(xPosition, -7f);
             labelX.GetComponent<Text>().text = i.ToString();
 
-            RectTransform dashX = Instantiate(dashTemplateY);
+            RectTransform dashX = Instantiate(dashTemplateX);
             dashX.SetParent(graphContainer, false);
             dashX.gameObject.SetActive(true);
             dashX.anchoredPosition = new Vector2(xPosition, -7f);
@@ -85,7 +85,7 @@ public class Window_Graph : MonoBehaviour
             labelY.anchoredPosition = new Vector2(-7f, normalizedValue * graphHeight);
             labelY.GetComponent<Text>().text = Mathf.RoundToInt(normalizedValue * yMaximun).ToString();
 
-            RectTransform dashY = Instantiate(dashTemplateX);
+            RectTransform dashY = Instantiate(dashTemplateY);
             dashY.SetParent(graphContainer, false);
             dashY.gameObject.SetActive(true);
             dashY.anchoredPosition = new Vector2(-4f, normalizedValue * graphHeight);
