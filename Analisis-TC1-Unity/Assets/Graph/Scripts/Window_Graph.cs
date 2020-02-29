@@ -22,10 +22,10 @@ public class Window_Graph : MonoBehaviour
         labelTemplateY = graphContainer.Find("labelTemplateY").GetComponent<RectTransform>();
         dashTemplateX = graphContainer.Find("dashTemplateX").GetComponent<RectTransform>();
         dashTemplateY = graphContainer.Find("dashTemplateY").GetComponent<RectTransform>();
-        cantElements = new List<int>() {100, 1000, 10000, 20000, 35000, 50000, 65000, 80000, 95000, 100000};
+        cantElements = new List<int>() {150000, 300000, 500000, 700000, 1000000, 1200000, 1500000, 1700000, 2000000};
 
         //CreateCircle(new Vector2(200, 200));
-        //List<int> valueList = new List<int>() {5, 98, 56, 45, 30, 22, 17, 15, 13, 17, 25, 37, 40, 36, 33};
+        //List<int> valueList = new List<int>() {100, 1000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000};
         ShowGraph(cantElements, (int _i) => ""+(_i), (float _f) => Mathf.RoundToInt(_f) + "s");
 
         int n;
@@ -72,8 +72,8 @@ public class Window_Graph : MonoBehaviour
         }
 
         float graphHeight = graphContainer.sizeDelta.y;
-        float xSize = 85f;
-        float yMaximun = 50f;
+        float xSize = 100f;
+        float yMaximun = 20f;
 
         GameObject lastCircleGameObject = null;
         for(int i = 0; i < valueList.Count; i++){
@@ -88,7 +88,7 @@ public class Window_Graph : MonoBehaviour
             RectTransform labelX = Instantiate(labelTemplateX);
             labelX.SetParent(graphContainer, false);
             labelX.gameObject.SetActive(true);
-            labelX.anchoredPosition = new Vector2(xPosition, -7f);
+            labelX.anchoredPosition = new Vector2(xPosition, -3f);
             labelX.GetComponent<Text>().text = getAxisLabelX(valueList[i]);
 
             RectTransform dashX = Instantiate(dashTemplateX);
@@ -130,7 +130,7 @@ public class Window_Graph : MonoBehaviour
         for(int i = 0; i<pElementos;i++){
             valueList.Add(UnityEngine.Random.Range(0,500));
         }
-        return selectionSort(valueList);
+        return quickSort(valueList);
     }
 
     private float selectionSort(List<int> pListaElementos){
@@ -159,9 +159,33 @@ public class Window_Graph : MonoBehaviour
         pLista[posB] = tempNum;
     }
 
-    private float quickSort(List<int> pListaElementos){
-        float tiempo = 0f;
-        return tiempo;
+    public float quickSort(List<int> pLista){
+        return quickSort(pLista, 0, (pLista.Count)-1);
+    }
+
+    private float quickSort(List<int> pListaElementos, int primero, int ultimo){
+        DateTime inicio = DateTime.Now;
+        int central = (primero + ultimo)/2;
+        int pivote = pListaElementos[central];
+        int i = primero;
+        int j = ultimo;
+        do{
+            while (pListaElementos[i] < pivote) i++;
+            while (pListaElementos[j] > pivote) j--;
+            if(i <= j){
+                intercambiar(pListaElementos, i, j);
+                i++;
+                j--;
+            }
+        }while(i <= j);
+        if(primero < j){
+            quickSort(pListaElementos, primero, j);
+        }if(i < ultimo){
+            quickSort(pListaElementos, i, ultimo);
+        }
+        DateTime final = DateTime.Now;
+        TimeSpan duracion = final - inicio;
+        return (float)duracion.Seconds;;
     }
 
 }
